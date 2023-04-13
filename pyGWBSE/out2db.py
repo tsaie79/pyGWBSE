@@ -96,7 +96,7 @@ class bse2db(FiretaskBase):
             job_tag = None
         with open(filename, "a") as file:
             file.write("</modeling>")
-        vasprun = Vasprun(filename, parse_projected_eigen=False, parse_eigen=False)
+        vasprun = Vasprun(filename, exception_on_bad_xml=False)
         incar = vasprun.incar
         parameters = vasprun.parameters
         optical_transition = vasprun.optical_transition
