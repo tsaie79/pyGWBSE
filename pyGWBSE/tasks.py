@@ -222,7 +222,7 @@ def read_emcpyout(fname):
 def read_epsilon(fname):
     vasprun = Vasprun(fname)
     try:
-        epsilon = vasprun.epsilon_static_wolfe
+        epsilon = vasprun.ionic_steps[-1]["dielectric_ipa"] #vasprun.epsilon_static_wolfe
     except:
         epsilon = None
     return epsilon
