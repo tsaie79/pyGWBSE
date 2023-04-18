@@ -46,13 +46,17 @@ class CreateInputs(DictSet):
         self.wannier_fw = wannier_fw
 
     @property
-    def kpoints(self):
+    def kpoints(self, two_dim=False):
         """
         Generate gamma center k-points mesh grid for GW calc,
         which is requested by GW calculation.
         """
+        _fake_stucture = self.structure.copy()
+        if two_dim:
+            _fake_stucture.make_supercell([1, 1, 2])
+
         if self.mode == "EMC":
-            kpath = HighSymmKpath(self.structure)
+            kpath = HighSymmKpath(_fake_stucture)
             frac_k_points, k_points_labels = kpath.get_kpoints(
                 line_density=self.kpoints_line_density,
                 coords_are_cartesian=False)
@@ -67,7 +71,7 @@ class CreateInputs(DictSet):
 
         else:
 
-            kpoints=Kpoints.automatic_density_by_vol(self.structure, 
+            kpoints=Kpoints.automatic_density_by_vol(_fake_stucture,
                                         self.reciprocal_density, force_gamma=True)
             
             return kpoints
