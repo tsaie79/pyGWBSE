@@ -21,7 +21,8 @@ class CreateInputs(DictSet):
 
     def __init__(self, structure, prev_incar=None, nbands=None, nomegagw=None, encutgw=None,
                  potcar_functional="PBE_54", reciprocal_density=100, kpoints_line_density = 100, kpar=None, nbandsgw=None,
-                 mode="STATIC", copy_wavecar=True, nbands_factor=5, ncores=16,nbandso=None, nbandsv=None, wannier_fw=None,
+                 mode="STATIC", copy_wavecar=True, nbands_factor=5, ncores=16,nbandso=None, nbandsv=None,
+                 wannier_fw=None, two_dim=False,
                  **kwargs):
         super().__init__(structure, CreateInputs.CONFIG, **kwargs)
         self.prev_incar = prev_incar
@@ -44,15 +45,16 @@ class CreateInputs(DictSet):
         self.nbandso = nbandso
         self.nbandsv = nbandsv
         self.wannier_fw = wannier_fw
+        self.two_dim = two_dim
 
     @property
-    def kpoints(self, two_dim=False):
+    def kpoints(self):
         """
         Generate gamma center k-points mesh grid for GW calc,
         which is requested by GW calculation.
         """
         _fake_stucture = self.structure.copy()
-        if two_dim:
+        if self.two_dim:
             _fake_stucture.make_supercell([1, 1, 2])
 
         if self.mode == "EMC":
