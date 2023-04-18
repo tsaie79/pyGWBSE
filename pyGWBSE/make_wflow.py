@@ -83,7 +83,7 @@ def create_wfs(struct, params_dict, vasp_cmd=None, sumo_cmd=None, wannier_cmd=No
     scgw=params_dict["WFLOW_DESIGN"]["scgw"]
     skip_bse=params_dict["WFLOW_DESIGN"]["skip_bse"]
 
-    mesh,nkpt=num_ir_kpts(struct,rd)
+    mesh,nkpt=num_ir_kpts(struct,rd, two_dim=two_dim)
     nbands=(int(nocc/ppn)+1)*ppn
     nbandsgw=nocc+10
 
