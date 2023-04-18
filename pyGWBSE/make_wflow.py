@@ -19,7 +19,7 @@ import sys
 def num_ir_kpts(struct,reciprocal_density, two_dim=False):
     _fake_structure = struct.copy()
     if two_dim:
-        _fake_structure.make_supercell([1,1,2])
+        _fake_structure.make_supercell([1,1,4])
     spg=SpacegroupAnalyzer(_fake_structure, symprec=0.01, angle_tolerance=5)
     Kpts=Kpoints.automatic_density_by_vol(_fake_structure,reciprocal_density,force_gamma=True)
     kpts=spg.get_ir_reciprocal_mesh(mesh=Kpts.kpts, is_shift=(0, 0, 0))

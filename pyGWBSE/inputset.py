@@ -55,7 +55,7 @@ class CreateInputs(DictSet):
         """
         _fake_stucture = self.structure.copy()
         if self.two_dim:
-            _fake_stucture.make_supercell([1, 1, 2])
+            _fake_stucture.make_supercell([1, 1, 4])
 
         if self.mode == "EMC":
             kpath = HighSymmKpath(_fake_stucture)
