@@ -65,6 +65,7 @@ def create_wfs(struct, params_dict, vasp_cmd=None, sumo_cmd=None, wannier_cmd=No
     nocc=num_occ_bands(struct)
     kpar=params["kpar"] 
     ppn=params["ppn"]
+    two_dim = params["two_dim"]
     rd=params["reciprocal_density"]
     nbgwfactor=params["nbgwfactor"]
     encutgw=params["encutgw"]
@@ -102,24 +103,28 @@ def create_wfs(struct, params_dict, vasp_cmd=None, sumo_cmd=None, wannier_cmd=No
 
     ifw=0 
 
-    fws = [ScfFW(structure=struct, mat_name=mat_name, nbands=nbands, vasp_cmd=vasp_cmd,db_file=db_file,kpar=kpar,reciprocal_density=rd,wannier_fw=not(skip_wannier))]
+    fws = [ScfFW(structure=struct, mat_name=mat_name, nbands=nbands, vasp_cmd=vasp_cmd,db_file=db_file,kpar=kpar,
+                 reciprocal_density=rd,wannier_fw=not(skip_wannier), two_dim=two_dim)]
 
     if skip_emc==False:  
         ifw=ifw+1 
         parents = fws[0]
-        fw = EmcFW(structure=struct, mat_name=mat_name, vasp_cmd=vasp_cmd, sumo_cmd=sumo_cmd, db_file=db_file,kpar=kpar,reciprocal_density=rd, steps=0.001,parents=parents)
+        fw = EmcFW(structure=struct, mat_name=mat_name, vasp_cmd=vasp_cmd, sumo_cmd=sumo_cmd, db_file=db_file,
+                   kpar=kpar,reciprocal_density=rd, steps=0.001,parents=parents, two_dim=two_dim)
         fws.append(fw)
 
     if skip_wannier==False:
         ifw=ifw+1 
         parents = fws[0]
-        fw = WannierCheckFW(structure=struct, mat_name=mat_name, kpar=kpar, ppn=ppn,vasp_cmd=vasp_cmd,wannier_cmd=wannier_cmd,db_file=db_file,parents=parents,reciprocal_density=rd)
+        fw = WannierCheckFW(structure=struct, mat_name=mat_name, kpar=kpar, ppn=ppn,vasp_cmd=vasp_cmd, two_dim=two_dim,
+                            wannier_cmd=wannier_cmd,db_file=db_file,parents=parents,reciprocal_density=rd)
         fws.append(fw)
 
     ifw=ifw+1
     parents = fws[0]
     fw = convFW(structure=struct, mat_name=mat_name, nbands=nbands, nbgwfactor=nbgwfactor, encutgw=encutgw, nomegagw=nomegagw, convsteps=convsteps, conviter=conviter, 
-                    tolerence=0.1, no_conv=skip_conv, vasp_cmd=vasp_cmd,db_file=db_file,parents=parents,kpar=kpar,nbandsgw=nbandsgw,reciprocal_density=rd)
+                    tolerence=0.1, no_conv=skip_conv, vasp_cmd=vasp_cmd,db_file=db_file,parents=parents,kpar=kpar,
+                nbandsgw=nbandsgw,reciprocal_density=rd, two_dim=two_dim)
     fws.append(fw)
 
     if skip_gw==False:
@@ -132,7 +137,8 @@ def create_wfs(struct, params_dict, vasp_cmd=None, sumo_cmd=None, wannier_cmd=No
     if skip_wannier==False and skip_gw==False:
         ifw=ifw+1 
         parents = fws[ifw-1]
-        fw = WannierFW(structure=struct,mat_name=mat_name, wannier_cmd=wannier_cmd,db_file=db_file,parents=parents)
+        fw = WannierFW(structure=struct,mat_name=mat_name, wannier_cmd=wannier_cmd,db_file=db_file,parents=parents,
+                       two_dim=two_dim)
         fws.append(fw)
     
     if skip_bse==False and skip_gw==True:
