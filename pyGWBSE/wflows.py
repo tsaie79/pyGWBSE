@@ -113,7 +113,7 @@ class convFW(Firework):
 class GwFW(Firework):
     def __init__(self, mat_name=None, structure=None, tolerence=None, no_conv=None, reciprocal_density=None,
                  vasp_input_set=None, vasp_input_params=None, nbandso=None, nbandsv=None, nbandsgw=None,
-                 vasp_cmd="vasp", prev_calc_loc=True, prev_calc_dir=None, db_file=None, wannier_fw=None,
+                 vasp_cmd="vasp", prev_calc_loc=True, prev_calc_dir=None, db_file=None, wannier_fw=None, two_dim=False,
                  vasptodb_kwargs={}, job_tag=None, parents=None, **kwargs):
         """
         Your Comments Here
@@ -128,7 +128,7 @@ class GwFW(Firework):
             if prev_calc_loc:
                 t.append(CopyOutputFiles(additional_files=files2copy, calc_loc=prev_calc_loc, contcar_to_poscar=True))
         t.append(WriteGWInput(structure=structure, reciprocal_density=reciprocal_density, nbandsgw=nbandsgw,
-                                wannier_fw=wannier_fw))
+                                wannier_fw=wannier_fw, two_dim=two_dim))
         for niter in range(1, 10):
             task_label = 'scGW_Iteration: ' + str(niter)
             if wannier_fw:
@@ -148,7 +148,7 @@ class GwFW(Firework):
 
 class BseFW(Firework):
     def __init__(self, mat_name=None, structure=None, reciprocal_density=None, vasp_input_set=None,
-                 vasp_input_params=None, enwinbse=None,
+                 vasp_input_params=None, enwinbse=None, two_dim=False,
                  vasp_cmd="vasp", prev_calc_loc=True, prev_calc_dir=None, db_file=None, vasptodb_kwargs={},
                  job_tag=None, parents=None, **kwargs):
         """
@@ -164,7 +164,7 @@ class BseFW(Firework):
             if prev_calc_loc:
                 t.append(CopyOutputFiles(additional_files=files2copy, calc_loc=prev_calc_loc, contcar_to_poscar=True))
         t.append(SaveNbandsov(enwinbse=enwinbse))
-        t.append(WriteBSEInput(structure=structure, reciprocal_density=reciprocal_density))
+        t.append(WriteBSEInput(structure=structure, reciprocal_density=reciprocal_density, two_dim=two_dim))
         t.append(Run_Vasp(vasp_cmd=vasp_cmd))
         t.append(bse2db(structure=structure, mat_name=mat_name, task_label=name, job_tag=job_tag, db_file=db_file,
                         defuse_unsuccessful=False))

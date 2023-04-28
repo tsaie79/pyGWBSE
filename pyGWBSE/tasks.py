@@ -135,7 +135,7 @@ class WriteBSEInput(FiretaskBase):
     """
     Your Comments Here
     """
-    required_params = ["structure", "reciprocal_density"]
+    required_params = ["structure", "reciprocal_density", "two_dim"]
 
     def run_task(self, fw_spec):
         """
@@ -144,11 +144,12 @@ class WriteBSEInput(FiretaskBase):
         f_incar = str(os.getcwd()) + '/INCAR'
         structure = self["structure"]
         reciprocal_density = self["reciprocal_density"]
+        two_dim = self["two_dim"]
         nbandso = fw_spec["nbandso"]
         nbandsv = fw_spec["nbandsv"]
         prev_incar = Incar.from_file(f_incar)
         vis = CreateInputs(structure, mode='BSE', prev_incar=prev_incar, reciprocal_density=reciprocal_density,
-                           nbandso=nbandso, nbandsv=nbandsv)
+                           nbandso=nbandso, nbandsv=nbandsv, two_dim=two_dim)
         vis.write_input(".")
 
 
@@ -157,7 +158,7 @@ class WriteGWInput(FiretaskBase):
     """
     Your Comments Here
     """
-    required_params = ["structure", "reciprocal_density", "nbandsgw", "wannier_fw"]
+    required_params = ["structure", "reciprocal_density", "nbandsgw", "wannier_fw", "two_dim"]
 
     def run_task(self, fw_spec):
         """
@@ -169,11 +170,13 @@ class WriteGWInput(FiretaskBase):
         nbandsgw = self["nbandsgw"]
         wannier_fw = self["wannier_fw"]
         reciprocal_density = self["reciprocal_density"]
+        two_dim = fw_spec["two_dim"]
         encutgw=fw_spec["encutgw"]
         nomegagw=fw_spec["nomegagw"]
         nbands=fw_spec["nbands"]
         vis = CreateInputs(structure, mode='GW', prev_incar=prev_incar, reciprocal_density=reciprocal_density,
-                           encutgw=encutgw, nomegagw=nomegagw, nbands=nbands, nbandsgw=nbandsgw, wannier_fw=wannier_fw)
+                           encutgw=encutgw, nomegagw=nomegagw, nbands=nbands, nbandsgw=nbandsgw,
+                           wannier_fw=wannier_fw, two_dim=two_dim)
         vis.write_input(".")
 
 
