@@ -170,7 +170,7 @@ class WriteGWInput(FiretaskBase):
         nbandsgw = self["nbandsgw"]
         wannier_fw = self["wannier_fw"]
         reciprocal_density = self["reciprocal_density"]
-        two_dim = fw_spec["two_dim"]
+        two_dim = self["two_dim"]
         encutgw=fw_spec["encutgw"]
         nomegagw=fw_spec["nomegagw"]
         nbands=fw_spec["nbands"]
