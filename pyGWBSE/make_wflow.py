@@ -134,7 +134,8 @@ def create_wfs(struct, params_dict, vasp_cmd=None, sumo_cmd=None, wannier_cmd=No
         ifw=ifw+1
         parents = fws[ifw-1]
         fw = GwFW(structure=struct, mat_name=mat_name, tolerence=0.1, no_conv=not(scgw),
-                vasp_cmd=vasp_cmd,db_file=db_file,parents=parents,reciprocal_density=rd, nbandsgw=nbandsgw, wannier_fw=not(skip_wannier), job_tag=gw_tag)
+                vasp_cmd=vasp_cmd,db_file=db_file,parents=parents,reciprocal_density=rd, nbandsgw=nbandsgw,
+                  wannier_fw=not(skip_wannier), job_tag=gw_tag, two_dim=two_dim)
         fws.append(fw)
 
     if skip_wannier==False and skip_gw==False:
@@ -154,7 +155,8 @@ def create_wfs(struct, params_dict, vasp_cmd=None, sumo_cmd=None, wannier_cmd=No
         else:
             parents = fws[ifw-1]
         fw = BseFW(structure=struct, mat_name=mat_name,
-                    vasp_cmd=vasp_cmd,db_file=db_file,parents=parents,reciprocal_density=rd,enwinbse=enwinbse, job_tag=gw_tag+'-BSE')
+                    vasp_cmd=vasp_cmd,db_file=db_file,parents=parents,reciprocal_density=rd,enwinbse=enwinbse,
+                   job_tag=gw_tag+'-BSE', two_dim=two_dim)
         fws.append(fw)
 
 
